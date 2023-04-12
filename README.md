@@ -11,6 +11,7 @@ NL2Client nl2("192.168.178.51", 15151, 500, false);     // Arguments: IP address
 ```
 
 ### Functions
+```
 bool Idle()                   // true if connected to server
 String getVersion()
 bool updateTelemetry()        // true if telemetry data successfully retrieved from server
@@ -70,3 +71,4 @@ bool stationFlyerCarCanLock()
 bool stationFlyerCarCanUnlock()
 bool stationTrainInsideStation()
 bool stationTrainInsideStationIsCurrentRideView()
+```
