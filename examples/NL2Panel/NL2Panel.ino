@@ -10,16 +10,10 @@ WiFiClient client;
 AutoConnect Portal(Server);
 AutoConnectConfig Config;
 
-NL2Client nl2("192.168.178.51", 15151, 500, false);
+NL2Client nl2("192.168.178.10", 15151, 500, false);
 
 //Define buttons
 const int buttonPin[] = {13, 12, 14, 27, 26, 25, 33, 32};
-/*
-int buttonState[] = {1, 1, 1, 1, 1, 1, 1, 1};
-int prevButtonState[] = {1, 1, 1, 1, 1, 1, 1, 1};
-int actionSent[] = {0, 0, 0, 0, 0, 0, 0, 0};
-long startedPressing[] = {0, 0, 0, 0, 0, 0, 0, 0};
-*/
 
 //Define LEDs
 const int LEDPin[] = {19, 18, 17, 16};
@@ -45,29 +39,16 @@ void setup() {
     digitalWrite(LEDPin[i], LOW);
   }
 
-  Config.apid = "ControlPanel-"+String((uint32_t)(ESP.getEfuseMac() >> 32), HEX); //+WiFi.macAddress();
+  //Initialize WiFi
+  Config.apid = "ControlPanel-"+String((uint32_t)(ESP.getEfuseMac() >> 32), HEX);
   Config.psk = "nl2";
-  Config.hostName = "ControlPanel-"+String((uint32_t)(ESP.getEfuseMac() >> 32), HEX);//+WiFi.macAddress();
+  Config.hostName = "ControlPanel-"+String((uint32_t)(ESP.getEfuseMac() >> 32), HEX);
   Config.ota = AC_OTA_BUILTIN;
   Config.title ="#ControlPanel";
-  Config.boundaryOffset = 64;                   //Veraltet?
-
-  /*ACText(header, "Set Server");
-  ACText(caption1, "Enter the server IP. The server must be in the same local network.");
-  ACSubmit(save, "SAVE", "/settings_save");
-  AutoConnectAux  aux1("/settings", "Set NL2 Server", true, { header, caption1, save });
-  
-  ACText(caption2, "Server IP saved.");
-  //ACSubmit(start, "START", "/mqtt_start"); 
-  AutoConnectAux  aux2("/settings_save", "Settings saved", false, { caption2 });
-  
-  //AutoConnectAux  aux3("/mqtt_start", "MQTT Start");
-
-  Portal.join({ aux1, aux2 });*/
+  Config.boundaryOffset = 64;
   
   Portal.config(Config);
 
-  Server.on("/",HTTP_GET,returnVirtualPanel);
   Server.on("/json",returnJson);
   
   if (Portal.begin()) {
@@ -194,63 +175,8 @@ void loop() {
     return;
     }
 
-  //Check for button presses
-  /*
-  for (int i = 0; i < (sizeof(buttonPin) / sizeof(buttonPin[0])); i++) {
-    buttonState[i] = digitalRead(buttonPin[i]);
-    long pressingDuration = millis() - startedPressing[i];
-    // HIGH = state 1 <- button not pressed
-    // LOW  = state 0 <- button pressed
-
-    if (buttonState[i] == 0 and prevButtonState[i] == 1) { //not pressed -> pressed  
-      startedPressing[i] = millis();
-      actionSent[i] = 0;
-    }
-    else if (buttonState[i] == 1 and prevButtonState[i] == 0) { //pressed -> not pressed  
-      if (pressingDuration > 50 and pressingDuration <= 1000){ //short press
-        outputAction(i, 1);
-      }
-      if (pressingDuration > 50){outputAction(i, 0);} //release
-    }
-    else if (buttonState[i] == 0 and prevButtonState[i] == 0) { //still pressed
-      if(pressingDuration > 1000 and actionSent[i] != 1){ //long press
-        actionSent[i] = 1;
-        outputAction(i, 2);
-      }
-    }
-   prevButtonState[i] = buttonState[i]; 
-  }
-*/
-
   delay(50);
 }
-
-/*
-void outputAction(int i, int typeOfPress) {
-  // typeOfPress 0: release; 1: short, 2: long
-  // LEDState 0: off; 1: on; 2: blink (Cycle 1); 3: blink (Cycle 2); 
-  
-  if(i == 1){ //Reset
-    if(typeOfPress == 2){
-        ESP.restart();
-        }
-      }
-  else if(i == 3){ //Dispatch left
-    if(typeOfPress == 2){
-      if(digitalRead(buttonPin[6]) == LOW and nl2.stationCanDispatch()){
-        nl2.dispatch(nl2.currentCoaster,nl2.nearestStation);
-        }
-      }
-    }
-  else if(i == 6){ //Dispatch right
-    if(typeOfPress == 2){
-      if(digitalRead(buttonPin[3]) == LOW and nl2.stationCanDispatch()){
-        nl2.dispatch(nl2.currentCoaster,nl2.nearestStation);
-        }
-      }
-    }
-}
-*/
 
 void setLEDs(){
   //Switch blink cycle
@@ -342,13 +268,4 @@ void returnJson(){
     }
   serializeJsonPretty(root, buffer);
   Server.send(200, "application/json", buffer);
-  }
-
-void returnVirtualPanel(){
-  //TO-DO: No reload --> ajax/jquery to /action. Auto refresh controls (E-Stop on...?)
-  if(Server.arg("action") == "test"){
-        
-    }
-
-  Server.send(200, "text/plain", Server.arg("action"));
   }
