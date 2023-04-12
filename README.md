@@ -12,9 +12,9 @@ NL2Client nl2("192.168.178.51", 15151, 500, false);     // Arguments: IP address
 
 ### Get values (pretty self-explanatory)
 | Function  | Arguments | Returns |
-| --- | --- |
+| --- | --- | --- |
 | .Idle()  | none | true, if connected to server<br/>false, otherwise |
-| Content Cell  | Content Cell  |
+| .Idle()  | none | true, if connected to server<br/>false, otherwise |
 
 nl2;
 nl2.getVersion();
