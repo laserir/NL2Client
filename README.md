@@ -5,9 +5,24 @@ An easy-to-use client for the NoLimits 2 Telemetry Server for Arduino, ESP32...
 Search for "NL2Client" in the Arduino IDE Library Manager.
 
 ## Usage
-### Create an instance
+### Example
 ```
+// Create an instance
 NL2Client nl2("192.168.178.51", 15151, 500, false);     // Arguments: IP address, port, timeout, debug
+
+if(nl2.updateTelemetry()){
+  nl2.getCurrentCoasterAndNearestStation();
+  nl2.getStationState(nl2.currentCoaster,nl2.nearestStation);
+
+  //Get values, e.g. ...
+  Serial.print("Paused?");Serial.println(nl2.telemetryPaused());
+  Serial.print("E-Stop active?");Serial.println(nl2.stationEstop());
+
+  //...or set values, e.g. ...
+  if(nl2.stationGatesCanClose()){
+    nl2.setGates(nl2.currentCoaster,nl2.nearestStation,false);
+  }   
+}
 ```
 
 ### Functions
