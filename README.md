@@ -7,6 +7,8 @@ Search for "NL2Client" in the Arduino IDE Library Manager.
 ## Usage
 ### Example
 ```
+#include <NL2Client.h>
+
 // Create an instance
 NL2Client nl2("192.168.178.51", 15151, 500, false);     // Arguments: IP address, port, timeout, debug
 
