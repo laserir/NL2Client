@@ -35,8 +35,8 @@ bool updateTelemetry()        // true if telemetry data successfully retrieved f
 uint32_t getCoasterCount()
 String getCoasterName(uint32_t coasterID)
 bool getCurrentCoasterAndNearestStation()   // retrieve and set .currentCoaster and .nearestStation
-uint32_t getCurrentCoaster()                // call .getCurrentCoasterAndNearestStation() first
-uint32_t getNearestStation()                // call .getCurrentCoasterAndNearestStation() first
+uint32_t getCurrentCoaster()
+uint32_t getNearestStation()
 bool setEstop(uint32_t coasterID, bool state)
 uint32_t getStationState(uint32_t coasterID, uint32_t stationID)
 bool setManualMode(uint32_t coasterID, uint32_t stationID, bool state)
