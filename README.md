@@ -7,6 +7,8 @@ Search for "NL2Client" in the Arduino IDE Library Manager.
 ## Usage
 ### Example
 ```
+# ** Add code to connect to WiFi ***
+
 #include <NL2Client.h>
 
 // Create an instance
